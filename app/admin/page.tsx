@@ -1,78 +1,106 @@
 'use client';
 
-import React, { useState } from 'react';
-import { DashboardOutlined, UserOutlined } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
-import { Breadcrumb, Layout, Menu, theme, Button } from 'antd';
+import React, { useContext, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { DashboardOutlined, UserOutlined, ShopOutlined, AppleOutlined, CoffeeOutlined, ForkOutlined } from '@ant-design/icons';
+import { Breadcrumb, Layout, Menu, theme, Button, Typography, Image } from 'antd';
 import Dashboard from '@/components/admin/Dashboard';
 import UserManagement from '@/components/admin/UserManagement';
+import BusinessModels from '@/components/admin/Business/BusinessModels';
+import DietManagement from '@/components/admin/Diet/DietManagement';
+import TasteManagement from '@/components/admin/Taste/TasteManagement';
+import FoodTypeManagement from '@/components/admin/FoodType/FoodTypeManagement';
+import { AuthContext } from '@/contexts/AuthContext';
 
 const { Header, Content, Footer, Sider } = Layout;
+const { Text } = Typography;
 
-const menuItems: MenuProps['items'] = [
-  {
-    key: 'dashboard',
-    icon: <DashboardOutlined />,
-    label: 'Dashboard',
-  },
-  {
-    key: 'users',
-    icon: <UserOutlined />,
-    label: 'Quản lý User',
-  },
+const MENU_ITEMS = [
+  { key: 'dashboard', icon: <DashboardOutlined />, label: 'Bảng điều khiển' },
+  { key: 'users', icon: <UserOutlined />, label: 'Người dùng' },
+  { key: 'business', icon: <ShopOutlined />, label: 'Mô hình kinh doanh' },
+  { key: 'diet', icon: <AppleOutlined />, label: 'Chế độ ăn' },
+  { key: 'taste', icon: <CoffeeOutlined />, label: 'Khẩu vị' },
+  { key: 'foodtype', icon: <ForkOutlined />, label: 'Loại món ăn' },
 ];
 
 const AdminPage: React.FC = () => {
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
+  const { token: { colorBgContainer, borderRadiusLG } } = theme.useToken();
+  const { authData, setAuthData } = useContext(AuthContext);
   const [selectedKey, setSelectedKey] = useState('dashboard');
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!authData.accessToken) router.push('/auth/login');
+  }, [authData, router]);
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    window.location.href = '/auth/login';
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    setAuthData({ accessToken: null, refreshToken: null, user: null });
+    router.push('/auth/login');
   };
 
-  const handleMenuClick: MenuProps['onClick'] = (e) => {
-    setSelectedKey(e.key);
-  };
+  const breadcrumbItems = [
+    { title: 'Quản trị' },
+    {
+      title: 
+        selectedKey === 'dashboard' ? 'Bảng điều khiển' :
+        selectedKey === 'users' ? 'Người dùng' :
+        selectedKey === 'business' ? 'Mô hình kinh doanh' :
+        selectedKey === 'diet' ? 'Chế độ ăn' :
+        selectedKey === 'taste' ? 'Khẩu vị' :
+        selectedKey === 'foodtype' ? 'Loại món ăn' : '',
+    },
+  ];
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div className="demo-logo" />
-        <Button
-          type="primary"
-          onClick={handleLogout}
-          style={{ backgroundColor: '#ff4d4f', borderColor: '#ff4d4f' }}
-        >
-          Logout
-        </Button>
-      </Header>
-      <div style={{ padding: '0 48px' }}>
-        <Breadcrumb
-          style={{ margin: '16px 0' }}
-          items={[{ title: 'Home' }, { title: 'Admin' }, { title: selectedKey === 'dashboard' ? 'Dashboard' : 'Quản lý User' }]}
+      <Header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#001529' }}>
+        <Image
+          src="/images/logo-mm-final-2.png"
+          alt="Logo"
+          width={250}
+          height={80}
+          preview={false}
+          style={{ objectFit: 'contain' }}
         />
-        <Layout
-          style={{ padding: '24px 0', background: colorBgContainer, borderRadius: borderRadiusLG }}
-        >
-          <Sider style={{ background: colorBgContainer }} width={200}>
+        <Text strong style={{ color: '#fff', fontSize: 18, flex: 1, textAlign: 'center' }}>
+          Trang quản lý của Admin
+        </Text>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <Text strong style={{ color: '#fff', fontSize: 18 }}>
+            {authData.user?.fullname || 'Người dùng'}
+          </Text>
+          <Button type="primary" danger onClick={handleLogout}>
+            Đăng xuất
+          </Button>
+        </div>
+      </Header>
+      <Layout style={{ padding: '0 24px' }}>
+        <Breadcrumb items={breadcrumbItems} style={{ margin: '16px 0' }} />
+        <Layout style={{ padding: '24px 0', background: colorBgContainer, borderRadius: borderRadiusLG }}>
+          <Sider width={200} style={{ background: colorBgContainer }}>
             <Menu
               mode="inline"
               selectedKeys={[selectedKey]}
+              items={MENU_ITEMS}
+              onClick={({ key }) => setSelectedKey(key)}
               style={{ height: '100%' }}
-              items={menuItems}
-              onClick={handleMenuClick}
             />
           </Sider>
-          <Content style={{ padding: '0 24px', minHeight: 280 }}>
-            {selectedKey === 'dashboard' ? <Dashboard /> : <UserManagement />}
+          <Content style={{ padding: '0 24px', minHeight: '75vh' }}>
+            {selectedKey === 'dashboard' && <Dashboard />}
+            {selectedKey === 'users' && <UserManagement />}
+            {selectedKey === 'business' && <BusinessModels />}
+            {selectedKey === 'diet' && <DietManagement />}
+            {selectedKey === 'taste' && <TasteManagement />}
+            {selectedKey === 'foodtype' && <FoodTypeManagement />}
           </Content>
         </Layout>
-      </div>
+      </Layout>
       <Footer style={{ textAlign: 'center' }}>
-        Ant Design ©{new Date().getFullYear()} Created by Ant UED
+        Ant Design ©{new Date().getFullYear()} - Tạo bởi Ant UED
       </Footer>
     </Layout>
   );

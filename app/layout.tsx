@@ -1,22 +1,21 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Baloo_2 } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
+import NotificationProvider from "@/components/NotificationProvider";
+import { AuthProvider } from "@/contexts/AuthContext";
 import "./globals.css";
 import "@ant-design/v5-patch-for-react-19";
 
-// Cấu hình font Geist Sans
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
-// Cấu hình font Geist Mono
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
-// Cấu hình font Baloo 2
 const baloo2 = Baloo_2({
   variable: "--font-baloo-2",
   subsets: ["latin", "vietnamese"],
@@ -36,18 +35,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${baloo2.variable} antialiased`}
-        style={{ fontFamily: "var(--font-baloo-2)" }}
-      >
-        <AntdRegistry>{children}</AntdRegistry>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${baloo2.variable} antialiased`} style={{ fontFamily: "var(--font-baloo-2)" }}>
+        <AntdRegistry>
+          <AuthProvider>
+            <NotificationProvider>{children}</NotificationProvider>
+          </AuthProvider>
+        </AntdRegistry>
       </body>
     </html>
   );
