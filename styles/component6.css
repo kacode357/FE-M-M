@@ -1,0 +1,101 @@
+.component6-title {
+  font-size: 3rem !important; /* Tăng từ 2.5rem */
+}
+
+.component6-step-title {
+  font-size: 1.5rem !important; /* Tăng từ 1.125rem (text-lg) */
+}
+
+.component6-step-description {
+  font-size: 1.125rem !important; /* Tăng từ 1rem (text-sm) */
+}
+
+@media (min-width: 640px) {
+  .component6-title {
+    font-size: 4rem !important; /* Tăng từ 3.5rem */
+  }
+
+  .component6-step-title {
+    font-size: 1.75rem !important; /* Tăng từ 1.25rem (text-xl) */
+  }
+
+  .component6-step-description {
+    font-size: 1.2rem !important; /* Tăng từ 1.25rem (text-base) */
+  }
+}
+
+/* Tùy chỉnh Steps của Ant Design */
+.custom-steps {
+  /* Trên mobile, xếp dọc */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Trên desktop, nằm ngang */
+@media (min-width: 640px) {
+  .custom-steps {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+  }
+
+  /* Đường Steps màu cam */
+  .custom-steps .ant-steps-item-tail::after {
+    background-color: #f28c38 !important;
+    height: 4px !important;
+    width: 100% !important; /* Đảm bảo đường kẻ kéo dài toàn bộ */
+  }
+
+  /* Ẩn dấu chấm mặc định của Steps */
+  .custom-steps .ant-steps-item-icon {
+    display: none !important;
+  }
+
+  /* Đảm bảo nội dung căn giữa và không bị lệch */
+  .custom-steps .ant-steps-item-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 0;
+    min-height: 300px; /* Đảm bảo chiều cao đồng đều */
+  }
+
+  /* Đảm bảo Steps nằm ngang */
+  .custom-steps .ant-steps-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Ẩn tiêu đề mặc định của Steps (vì chúng ta dùng Title bên trong) */
+  .custom-steps .ant-steps-item-title {
+    padding-right: 0 !important;
+  }
+
+  /* Đảm bảo đường kẻ hiển thị trên desktop */
+  .custom-steps .ant-steps-item-tail {
+    display: block !important;
+    visibility: visible !important;
+  }
+}
+
+.step-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 450px; /* Giới hạn chiều rộng */
+}
+
+.step-image {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1rem;
+}
+
+.step-description {
+  overflow-wrap: break-word;
+  word-break: break-word;
+  text-align: center;
+}

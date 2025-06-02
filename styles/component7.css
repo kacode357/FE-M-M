@@ -1,0 +1,113 @@
+/* Header section */
+.header-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 4rem; /* Đảm bảo khoảng cách đủ lớn */
+  position: relative;
+  z-index: 2; /* Đặt z-index cao hơn card để tránh bị đè */
+}
+
+/* Trên desktop, xếp ngang */
+@media (min-width: 640px) {
+  .header-section {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
+
+/* Phần tiêu đề bên trái */
+.header-left {
+  flex: 1;
+  text-align: center;
+}
+
+/* Trên desktop, căn trái */
+@media (min-width: 640px) {
+  .header-left {
+    text-align: left;
+  }
+}
+
+/* Phần mô tả bên phải */
+.header-right {
+  flex: 1;
+  text-align: center;
+}
+
+/* Trên desktop, căn trái */
+@media (min-width: 640px) {
+  .header-right {
+    text-align: left;
+  }
+}
+
+/* Tăng kích thước font */
+.component7-title {
+  font-size: 2.5rem !important;
+}
+
+.component7-description {
+  font-size: 1rem !important;
+}
+
+@media (min-width: 640px) {
+  .component7-title {
+    font-size: 3.5rem !important;
+  }
+
+  .component7-description {
+    font-size: 1.25rem !important;
+  }
+}
+
+/* Grid chứa danh sách thành viên */
+.team-grid {
+  display: flex;
+  flex-direction: column; /* Dọc trên mobile */
+  gap: 2rem;
+  overflow-x: auto; /* Cho phép cuộn ngang nếu cần */
+}
+
+/* Trên desktop, xếp 6 thành viên trên 1 dòng */
+@media (min-width: 640px) {
+  .team-grid {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+/* Card thành viên */
+.team-card {
+  border: 2px solid #f28c38 !important; /* Bo viền mặc định màu cam */
+  background: transparent !important;
+  text-align: center;
+  flex: 1;
+  min-width: 200px; /* Đảm bảo kích thước tối thiểu cho card */
+  transition: all 0.3s ease; /* Hiệu ứng mượt mà khi hover */
+  position: relative;
+  z-index: 1; /* z-index thấp hơn header */
+}
+
+/* Hiệu ứng hover cho card */
+.team-card:hover {
+  border-color: #e08600 !important; /* Đổi màu viền khi hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Thêm bóng đậm hơn */
+}
+
+/* Thành viên */
+.team-member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Avatar */
+.team-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 8px; /* Hình chữ nhật với góc bo nhẹ */
+  overflow: hidden;
+  margin: 0 auto;
+}
