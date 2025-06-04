@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { DashboardOutlined, UserOutlined, ShopOutlined, AppleOutlined, CoffeeOutlined, ForkOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme, Button, Typography, Image } from 'antd';
 import Dashboard from '@/components/admin/Dashboard';
-import UserManagement from '@/components/admin/UserManagement';
+import UserManagement from '@/components/admin/User/UserManagement';
 import BusinessModels from '@/components/admin/Business/BusinessModels';
 import DietManagement from '@/components/admin/Diet/DietManagement';
 import TasteManagement from '@/components/admin/Taste/TasteManagement';
@@ -16,7 +16,7 @@ const { Header, Content, Footer, Sider } = Layout;
 const { Text } = Typography;
 
 const MENU_ITEMS = [
-  { key: 'dashboard', icon: <DashboardOutlined />, label: 'Bảng điều khiển' },
+  { key: 'dashboard', icon: <DashboardOutlined />, label: 'Thống kê' },
   { key: 'users', icon: <UserOutlined />, label: 'Người dùng' },
   { key: 'business', icon: <ShopOutlined />, label: 'Mô hình kinh doanh' },
   { key: 'diet', icon: <AppleOutlined />, label: 'Chế độ ăn' },
@@ -45,7 +45,7 @@ const AdminPage: React.FC = () => {
     { title: 'Quản trị' },
     {
       title: 
-        selectedKey === 'dashboard' ? 'Bảng điều khiển' :
+        selectedKey === 'dashboard' ? 'Thống kê' :
         selectedKey === 'users' ? 'Người dùng' :
         selectedKey === 'business' ? 'Mô hình kinh doanh' :
         selectedKey === 'diet' ? 'Chế độ ăn' :
