@@ -43,7 +43,7 @@ const DietManagement: React.FC = () => {
   const [deleteVisible, setDeleteVisible] = useState(false);
   const [selectedDietId, setSelectedDietId] = useState<string | null>(null);
 
-  const fetchData = async (pageNum = 1, pageSize = 10, searchKeyword = '') => {
+  const fetchData = async (pageNum = 1, pageSize = 8, searchKeyword = '') => {
     setLoading(true);
     try {
       const response: ApiResponse = await searchDiet({ pageNum, pageSize, searchKeyword, status: true });

@@ -43,7 +43,7 @@ const TasteManagement: React.FC = () => {
   const [deleteVisible, setDeleteVisible] = useState(false);
   const [selectedTasteId, setSelectedTasteId] = useState<string | null>(null);
 
-  const fetchData = async (pageNum = 1, pageSize = 10, searchKeyword = '') => {
+  const fetchData = async (pageNum = 1, pageSize = 8, searchKeyword = '') => {
     setLoading(true);
     try {
       const response: ApiResponse = await searchTaste({ pageNum, pageSize, searchKeyword, status: true });

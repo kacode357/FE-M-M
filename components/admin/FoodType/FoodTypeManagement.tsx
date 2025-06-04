@@ -43,7 +43,7 @@ const FoodTypeManagement: React.FC = () => {
   const [deleteVisible, setDeleteVisible] = useState(false);
   const [selectedFoodTypeId, setSelectedFoodTypeId] = useState<string | null>(null);
 
-  const fetchData = async (pageNum = 1, pageSize = 10, searchKeyword = '') => {
+  const fetchData = async (pageNum = 1, pageSize = 8, searchKeyword = '') => {
     setLoading(true);
     try {
       const response: ApiResponse = await searchFoodType({ pageNum, pageSize, searchKeyword, status: true });
