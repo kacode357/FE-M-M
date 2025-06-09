@@ -1,5 +1,13 @@
 import { defaultAxiosInstance } from '@/config/axios.config';
 
+const CreateUserApi = async (data: { fullName: string; email: string; userName: string; password: string; }) => {
+    const response = await defaultAxiosInstance.post('/api/users/create', data);
+    return response.data;
+};
+const CreateMerchantApi = async (data: { fullName: string; email: string; userName: string; password: string; }) => {
+    const response = await defaultAxiosInstance.post('/api/merchants/create', data);
+    return response.data;
+};
 const LoginUserApi = async (data: { userName: string; password: string; }) => {
     const response = await defaultAxiosInstance.post('/api/users/login', data);
     return response.data;
@@ -26,6 +34,8 @@ const SearchUsersApi = async (data: { searchKeyword: string; status: boolean; pr
     return response.data;
 };
 export {
+    CreateUserApi,
+    CreateMerchantApi,
     GetUserByIdApi,
     UpdateUserApi,
     SearchUsersApi,

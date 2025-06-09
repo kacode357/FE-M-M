@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Space, message, Typography, Select } from 'antd';
-import { EditTwoTone, DeleteTwoTone, ReloadOutlined } from '@ant-design/icons';
+import { EditTwoTone, DeleteTwoTone, ReloadOutlined, PlusOutlined } from '@ant-design/icons';
 import { SearchUsersApi } from '@/services/user.services';
 import CreateUser from './CreateUser';
 import UpdateUser from './UpdateUser';
 import DeleteUser from './DeleteUser';
 import type { TablePaginationConfig } from 'antd/es/table';
+import '@/styles/antd-custom.css';
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
@@ -60,6 +61,7 @@ const UserManagement: React.FC = () => {
       const response: ApiResponse = await SearchUsersApi({
         searchKeyword: '',
         status: true,
+        premium: false, // Thêm premium để khớp với định nghĩa
         role,
         pageNum,
         pageSize,
@@ -71,7 +73,7 @@ const UserManagement: React.FC = () => {
         total: response.pageInfo.total,
       });
     } catch (error) {
-      message.error('Error fetching user list');
+      message.error('Lỗi khi tải danh sách người dùng');
     } finally {
       setLoading(false);
     }
@@ -101,12 +103,12 @@ const UserManagement: React.FC = () => {
 
   const columns = [
     {
-      title: 'Full Name',
+      title: 'Họ và Tên',
       dataIndex: 'fullName',
       key: 'fullName',
     },
     {
-      title: 'Username',
+      title: 'Tên đăng nhập',
       dataIndex: 'userName',
       key: 'userName',
     },
@@ -116,31 +118,31 @@ const UserManagement: React.FC = () => {
       key: 'mail',
     },
     {
-      title: 'Phone Number',
+      title: 'Số điện thoại',
       dataIndex: 'phoneNumber',
       key: 'phoneNumber',
       render: (phoneNumber: string | null) => phoneNumber || 'N/A',
     },
     {
-      title: 'Date of Birth',
+      title: 'Ngày sinh',
       dataIndex: 'dob',
       key: 'dob',
       render: (dob: string | null) => dob || 'N/A',
     },
     {
-      title: 'Roles',
+      title: 'Vai trò',
       dataIndex: 'roles',
       key: 'roles',
       render: (roles: string[]) => roles.join(', ') || 'N/A',
     },
     {
-      title: 'Status',
+      title: 'Trạng thái',
       dataIndex: 'status',
       key: 'status',
-      render: (status: boolean) => (status ? 'Active' : 'Inactive'),
+      render: (status: boolean) => (status ? 'Hoạt động' : 'Không hoạt động'),
     },
     {
-      title: 'Actions',
+      title: 'Hành động',
       key: 'action',
       render: (_: unknown, record: User) => (
         <Space>
@@ -151,6 +153,7 @@ const UserManagement: React.FC = () => {
               setSelectedUserId(record.id);
               setUpdateVisible(true);
             }}
+            aria-label="Chỉnh sửa người dùng"
           />
           <Button
             type="link"
@@ -160,6 +163,7 @@ const UserManagement: React.FC = () => {
               setSelectedUserId(record.id);
               setDeleteVisible(true);
             }}
+            aria-label="Xóa người dùng"
           />
         </Space>
       ),
@@ -167,27 +171,39 @@ const UserManagement: React.FC = () => {
   ];
 
   return (
-    <div>
-      <Title level={3}>User Management</Title>
-      <Paragraph>Manage your users here. Add, edit, or delete user accounts as needed.</Paragraph>
+    <div className="p-6 bg-white rounded-lg shadow-md">
+      <Title
+        level={3}
+        style={{ fontFamily: 'var(--font-baloo-2)', color: '#f28c38', fontWeight: 700 }}
+      >
+        Quản lý người dùng
+      </Title>
+      <Paragraph style={{ fontFamily: 'var(--font-baloo-2)', color: '#171717' }}>
+        Quản lý tài khoản người dùng tại đây. Thêm, chỉnh sửa hoặc xóa tài khoản theo nhu cầu.
+      </Paragraph>
       <Space style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between' }}>
         <Space>
           <Select
-            placeholder="Filter by role"
+            placeholder="Lọc theo vai trò"
             style={{ width: 150 }}
             value={selectedRole}
             onChange={handleRoleChange}
             allowClear
           >
-            <Option value="User">User</Option>
-            <Option value="Merchant">Merchant</Option>
+            <Option value="User">Người dùng</Option>
+            <Option value="Merchant">Thương nhân</Option>
           </Select>
           <Button icon={<ReloadOutlined />} onClick={handleReset}>
-            Reset
+            Đặt lại
           </Button>
         </Space>
-        <Button type="primary" onClick={() => setCreateVisible(true)}>
-          Create New
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          style={{ backgroundColor: '#f28c38', borderColor: '#f28c38' }}
+          onClick={() => setCreateVisible(true)}
+        >
+          Tạo mới
         </Button>
       </Space>
       <Table
@@ -197,6 +213,8 @@ const UserManagement: React.FC = () => {
         pagination={pagination}
         loading={loading}
         onChange={handleTableChange}
+        bordered
+        style={{ backgroundColor: '#fff' }}
       />
       <CreateUser
         visible={createVisible}
