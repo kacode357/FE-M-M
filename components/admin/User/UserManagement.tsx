@@ -8,7 +8,7 @@ import CreateUser from './CreateUser';
 import UpdateUser from './UpdateUser';
 import DeleteUser from './DeleteUser';
 import type { TablePaginationConfig } from 'antd/es/table';
-import '@/styles/antd-custom.css';
+
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
@@ -49,13 +49,13 @@ const UserManagement: React.FC = () => {
   const [data, setData] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState<string | undefined>(undefined);
-  const [pagination, setPagination] = useState<Pagination>({ current: 1, pageSize: 10, total: 0 });
+  const [pagination, setPagination] = useState<Pagination>({ current: 1, pageSize: 8, total: 0 });
   const [createVisible, setCreateVisible] = useState(false);
   const [updateVisible, setUpdateVisible] = useState(false);
   const [deleteVisible, setDeleteVisible] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
-  const fetchData = async (pageNum = 1, pageSize = 10, role = '') => {
+  const fetchData = async (pageNum = 1, pageSize = 8, role = '') => {
     setLoading(true);
     try {
       const response: ApiResponse = await SearchUsersApi({
@@ -171,16 +171,7 @@ const UserManagement: React.FC = () => {
   ];
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md">
-      <Title
-        level={3}
-        style={{ fontFamily: 'var(--font-baloo-2)', color: '#f28c38', fontWeight: 700 }}
-      >
-        Quản lý người dùng
-      </Title>
-      <Paragraph style={{ fontFamily: 'var(--font-baloo-2)', color: '#171717' }}>
-        Quản lý tài khoản người dùng tại đây. Thêm, chỉnh sửa hoặc xóa tài khoản theo nhu cầu.
-      </Paragraph>
+    <div className=" bg-white ">
       <Space style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between' }}>
         <Space>
           <Select

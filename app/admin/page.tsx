@@ -2,36 +2,43 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { DashboardOutlined, UserOutlined, ShopOutlined, AppleOutlined, CoffeeOutlined, ForkOutlined } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, theme, Button, Typography, Image } from 'antd';
+import { DashboardOutlined, UserOutlined, ShopOutlined, AppleOutlined, CoffeeOutlined, ForkOutlined, LeftOutlined, RightOutlined, DollarOutlined } from '@ant-design/icons';
+import Image from 'next/image';
+import { AuthContext } from '@/contexts/AuthContext';
 import Dashboard from '@/components/admin/Dashboard';
 import UserManagement from '@/components/admin/User/UserManagement';
 import BusinessModels from '@/components/admin/Business/BusinessModels';
 import DietManagement from '@/components/admin/Diet/DietManagement';
 import TasteManagement from '@/components/admin/Taste/TasteManagement';
 import FoodTypeManagement from '@/components/admin/FoodType/FoodTypeManagement';
-import { AuthContext } from '@/contexts/AuthContext';
+import PremiumPackageManagement from '@/components/admin/PremiumPackage/PremiumPackageManagement';
 
-const { Header, Content, Footer, Sider } = Layout;
-const { Text } = Typography;
+interface MenuItem {
+  key: string;
+  icon: React.ReactNode;
+  label: string;
+}
 
-const MENU_ITEMS = [
-  { key: 'dashboard', icon: <DashboardOutlined />, label: 'Thống kê' },
-  { key: 'users', icon: <UserOutlined />, label: 'Người dùng' },
-  { key: 'business', icon: <ShopOutlined />, label: 'Mô hình kinh doanh' },
-  { key: 'diet', icon: <AppleOutlined />, label: 'Chế độ ăn' },
-  { key: 'taste', icon: <CoffeeOutlined />, label: 'Khẩu vị' },
-  { key: 'foodtype', icon: <ForkOutlined />, label: 'Loại món ăn' },
+const MENU_ITEMS: MenuItem[] = [
+  { key: 'dashboard', icon: <DashboardOutlined className="text-xl" />, label: 'Thống kê' },
+  { key: 'users', icon: <UserOutlined className="text-xl" />, label: 'Người dùng' },
+  { key: 'business', icon: <ShopOutlined className="text-xl" />, label: 'Mô hình kinh doanh' },
+  { key: 'diet', icon: <AppleOutlined className="text-xl" />, label: 'Chế độ ăn' },
+  { key: 'taste', icon: <CoffeeOutlined className="text-xl" />, label: 'Khẩu vị' },
+  { key: 'foodtype', icon: <ForkOutlined className="text-xl" />, label: 'Loại món ăn' },
+  { key: 'premium', icon: <DollarOutlined className="text-xl" />, label: 'Gói Premium' },
 ];
 
 const AdminPage: React.FC = () => {
-  const { token: { colorBgContainer, borderRadiusLG } } = theme.useToken();
+  const [selectedKey, setSelectedKey] = useState<string>('dashboard');
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
   const { authData, setAuthData } = useContext(AuthContext);
-  const [selectedKey, setSelectedKey] = useState('dashboard');
   const router = useRouter();
 
   useEffect(() => {
-    if (!authData.accessToken) router.push('/auth/login');
+    if (!authData.accessToken) {
+      router.push('/auth/login');
+    }
   }, [authData, router]);
 
   const handleLogout = () => {
@@ -41,68 +48,95 @@ const AdminPage: React.FC = () => {
     router.push('/auth/login');
   };
 
-  const breadcrumbItems = [
-    { title: 'Quản trị' },
-    {
-      title: 
-        selectedKey === 'dashboard' ? 'Thống kê' :
-        selectedKey === 'users' ? 'Người dùng' :
-        selectedKey === 'business' ? 'Mô hình kinh doanh' :
-        selectedKey === 'diet' ? 'Chế độ ăn' :
-        selectedKey === 'taste' ? 'Khẩu vị' :
-        selectedKey === 'foodtype' ? 'Loại món ăn' : '',
-    },
-  ];
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleMenuClick = (key: string) => {
+    setSelectedKey(key);
+    if (!isSidebarOpen) {
+      setIsSidebarOpen(true);
+    }
+  };
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#001529' }}>
-        <Image
-          src="/images/logo-mm-final-2.png"
-          alt="Logo"
-          width={250}
-          height={80}
-          preview={false}
-          style={{ objectFit: 'contain' }}
-        />
-        <Text strong style={{ color: '#fff', fontSize: 18, flex: 1, textAlign: 'center' }}>
-          Trang quản lý của Admin
-        </Text>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <Text strong style={{ color: '#fff', fontSize: 18 }}>
-            {authData.user?.fullname || 'Người dùng'}
-          </Text>
-          <Button type="primary" danger onClick={handleLogout}>
-            Đăng xuất
-          </Button>
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Header */}
+      <header className="bg-white shadow-sm flex items-center justify-between px-6 py-4">
+        <div className="flex items-center space-x-4">
+          <Image
+            src="/images/logo-mm-final-2.png"
+            alt="Logo"
+            width={48}
+            height={48}
+            className="object-contain"
+          />
+          <h1 className="text-xl font-semibold text-gray-800">
+            Trang Quản Lý Admin
+          </h1>
         </div>
-      </Header>
-      <Layout style={{ padding: '0 24px' }}>
-        <Breadcrumb items={breadcrumbItems} style={{ margin: '16px 0' }} />
-        <Layout style={{ padding: '24px 0', background: colorBgContainer, borderRadius: borderRadiusLG }}>
-          <Sider width={200} style={{ background: colorBgContainer }}>
-            <Menu
-              mode="inline"
-              selectedKeys={[selectedKey]}
-              items={MENU_ITEMS}
-              onClick={({ key }) => setSelectedKey(key)}
-              style={{ height: '100%' }}
-            />
-          </Sider>
-          <Content style={{ padding: '0 24px', minHeight: '75vh' }}>
+        <button
+          onClick={handleLogout}
+          className="bg-[#FF9500] hover:bg-[#E68A00] text-white font-medium px-4 py-2 rounded-lg transition-colors"
+        >
+          Đăng xuất
+        </button>
+      </header>
+
+      {/* Main Content */}
+      <div className="flex flex-1">
+        {/* Sidebar */}
+        <aside
+          className={`bg-white shadow-lg transition-all duration-300 ease-in-out ${
+            isSidebarOpen ? 'w-64' : 'w-16'
+          }`}
+        >
+          <nav className="mt-4 flex flex-col h-full">
+            <div className="flex-1">
+              {MENU_ITEMS.map((item) => (
+                <button
+                  key={item.key}
+                  onClick={() => handleMenuClick(item.key)}
+                  className={`w-full flex items-center px-4 py-3 text-gray-600 hover:bg-gray-100 transition-colors ${
+                    selectedKey === item.key ? 'bg-[#FFF7ED] border-l-4 border-[#FF9500] text-[#FF9500]' : ''
+                  }`}
+                >
+                  <span className="flex-shrink-0 text-xl">
+                    {item.icon}
+                  </span>
+                  <span
+                    className={`ml-3 truncate whitespace-nowrap transition-opacity duration-300 ${
+                      isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'
+                    } ${selectedKey === item.key ? 'font-semibold' : ''}`}
+                  >
+                    {item.label}
+                  </span>
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={toggleSidebar}
+              className="flex items-center justify-center px-4 py-3 mb-4 text-[#FF9500] hover:bg-gray-100 transition-colors"
+            >
+              {isSidebarOpen ? <LeftOutlined className="text-lg" /> : <RightOutlined className="text-lg" />}
+            </button>
+          </nav>
+        </aside>
+
+        {/* Content */}
+        <main className="flex-1 p-6">
+          <div className="bg-white rounded-xl shadow-sm p-6 min-h-[80vh]">
             {selectedKey === 'dashboard' && <Dashboard />}
             {selectedKey === 'users' && <UserManagement />}
             {selectedKey === 'business' && <BusinessModels />}
             {selectedKey === 'diet' && <DietManagement />}
             {selectedKey === 'taste' && <TasteManagement />}
             {selectedKey === 'foodtype' && <FoodTypeManagement />}
-          </Content>
-        </Layout>
-      </Layout>
-      <Footer style={{ textAlign: 'center' }}>
-        Ant Design ©{new Date().getFullYear()} - Tạo bởi Ant UED
-      </Footer>
-    </Layout>
+            {selectedKey === 'premium' && <PremiumPackageManagement />}
+          </div>
+        </main>
+      </div>
+    </div>
   );
 };
 

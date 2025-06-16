@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Input, Space, message } from 'antd';
-import { SearchOutlined, EditTwoTone, DeleteTwoTone, ReloadOutlined } from '@ant-design/icons';
+import { SearchOutlined, EditTwoTone, DeleteTwoTone, ReloadOutlined, PlusOutlined } from '@ant-design/icons';
 import { searchTaste } from '@/services/taste.services';
 import CreateTaste from './CreateTaste';
 import UpdateTaste from './UpdateTaste';
@@ -137,7 +137,12 @@ const TasteManagement: React.FC = () => {
             Đặt lại
           </Button>
         </Space>
-        <Button type="primary" onClick={() => setCreateVisible(true)}>
+      <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          style={{ backgroundColor: '#f28c38', borderColor: '#f28c38' }}
+          onClick={() => setCreateVisible(true)}
+        >
           Tạo mới
         </Button>
       </Space>

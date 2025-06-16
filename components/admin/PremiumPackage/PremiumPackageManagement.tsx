@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Input, Space, message } from 'antd';
 import { SearchOutlined, EditTwoTone, DeleteTwoTone, ReloadOutlined, PlusOutlined } from '@ant-design/icons';
-import { searchBusinessModels } from '@/services/business.services';
-import CreateBusinessModel from './CreateBusinessModel';
-import UpdateBusinessModel from './UpdateBusinessModel';
-import DeleteBusinessModel from './DeleteBusinessModel';
+import { searchPremiumPackage } from '@/services/premiumPackage.services';
+import CreatePremiumPackage from './CreatePremiumPackage';
+import UpdatePremiumPackage from './UpdatePremiumPackage';
+import DeletePremiumPackage from './DeletePremiumPackage';
 import type { TablePaginationConfig } from 'antd/es/table';
 
-interface BusinessModel {
+interface PremiumPackage {
   id: string;
   name: string;
-  status: boolean;
+  price: number;
+  descriptions: string[];
 }
 
 interface PageInfo {
@@ -23,8 +24,8 @@ interface PageInfo {
 interface ApiResponse {
   status: number;
   message: string;
-  pageData: BusinessModel[];
-  pageInfo: PageInfo;
+  pageData: PremiumPackage[];
+  pageInfo?: PageInfo;
 }
 
 interface Pagination {
@@ -33,28 +34,29 @@ interface Pagination {
   total: number;
 }
 
-const BusinessModels: React.FC = () => {
-  const [data, setData] = useState<BusinessModel[]>([]);
+const PremiumPackageManagement: React.FC = () => {
+  const [data, setData] = useState<PremiumPackage[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [pagination, setPagination] = useState<Pagination>({ current: 1, pageSize: 10, total: 0 });
   const [createVisible, setCreateVisible] = useState(false);
   const [updateVisible, setUpdateVisible] = useState(false);
   const [deleteVisible, setDeleteVisible] = useState(false);
-  const [selectedBusinessId, setSelectedBusinessId] = useState<string | null>(null);
+  const [selectedPackageId, setSelectedPackageId] = useState<string | null>(null);
 
-  const fetchData = async (pageNum = 1, pageSize = 8, searchKeyword = '') => {
+  const fetchData = async (pageNum = 1, pageSize = 10, searchKeyword = '') => {
     setLoading(true);
     try {
-      const response: ApiResponse = await searchBusinessModels({ pageNum, pageSize, searchKeyword, status: true });
+      const response: ApiResponse = await searchPremiumPackage({ pageNum, pageSize, searchKeyword, status: true });
       setData(response.pageData);
+      console.log(response.pageData);
       setPagination({
-        current: response.pageInfo.pageNum,
-        pageSize: response.pageInfo.pageSize,
-        total: response.pageInfo.total,
+        current: response.pageInfo?.pageNum || pageNum,
+        pageSize: response.pageInfo?.pageSize || pageSize,
+        total: response.pageInfo?.total || 0,
       });
     } catch (error) {
-      message.error('Lỗi khi lấy danh sách mô hình kinh doanh');
+      message.error('Lỗi khi lấy danh sách gói premium');
     } finally {
       setLoading(false);
     }
@@ -84,26 +86,35 @@ const BusinessModels: React.FC = () => {
 
   const columns = [
     {
-      title: 'Tên mô hình',
+      title: 'Tên gói',
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: 'Trạng thái',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status: boolean) => (status ? 'Hoạt động' : 'Không hoạt động'),
+      title: 'Giá',
+      dataIndex: 'price',
+      key: 'price',
+      render: (price: number | undefined) =>
+        price != null
+          ? price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
+          : 'N/A',
+    },
+    {
+      title: 'Mô tả',
+      dataIndex: 'descriptions',
+      key: 'descriptions',
+      render: (descriptions: string[]) => descriptions.join(', ') || 'Không có mô tả',
     },
     {
       title: 'Hành động',
       key: 'action',
-      render: (_: unknown, record: BusinessModel) => (
+      render: (_: unknown, record: PremiumPackage) => (
         <Space>
           <Button
             type="link"
             icon={<EditTwoTone />}
             onClick={() => {
-              setSelectedBusinessId(record.id);
+              setSelectedPackageId(record.id);
               setUpdateVisible(true);
             }}
           />
@@ -112,7 +123,7 @@ const BusinessModels: React.FC = () => {
             danger
             icon={<DeleteTwoTone twoToneColor="#ff4d4f" />}
             onClick={() => {
-              setSelectedBusinessId(record.id);
+              setSelectedPackageId(record.id);
               setDeleteVisible(true);
             }}
           />
@@ -126,7 +137,7 @@ const BusinessModels: React.FC = () => {
       <Space style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between' }}>
         <Space>
           <Input.Search
-            placeholder="Tìm kiếm mô hình"
+            placeholder="Tìm kiếm gói premium"
             onSearch={handleSearch}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
@@ -137,7 +148,7 @@ const BusinessModels: React.FC = () => {
             Đặt lại
           </Button>
         </Space>
-       <Button
+        <Button
           type="primary"
           icon={<PlusOutlined />}
           style={{ backgroundColor: '#f28c38', borderColor: '#f28c38' }}
@@ -154,28 +165,28 @@ const BusinessModels: React.FC = () => {
         loading={loading}
         onChange={handleTableChange}
       />
-      <CreateBusinessModel
+      <CreatePremiumPackage
         visible={createVisible}
         onClose={() => setCreateVisible(false)}
         onSuccess={handleSuccess}
       />
-      {selectedBusinessId && (
+      {selectedPackageId && (
         <>
-          <UpdateBusinessModel
+          <UpdatePremiumPackage
             visible={updateVisible}
-            businessId={selectedBusinessId}
+            packageId={selectedPackageId}
             onClose={() => {
               setUpdateVisible(false);
-              setSelectedBusinessId(null);
+              setSelectedPackageId(null);
             }}
             onSuccess={handleSuccess}
           />
-          <DeleteBusinessModel
+          <DeletePremiumPackage
             visible={deleteVisible}
-            businessId={selectedBusinessId}
+            packageId={selectedPackageId}
             onClose={() => {
               setDeleteVisible(false);
-              setSelectedBusinessId(null);
+              setSelectedPackageId(null);
             }}
             onSuccess={handleSuccess}
           />
@@ -185,4 +196,4 @@ const BusinessModels: React.FC = () => {
   );
 };
 
-export default BusinessModels;
+export default PremiumPackageManagement;

@@ -3,7 +3,7 @@
 import React from 'react';
 import { Result, Button, Typography } from 'antd';
 import Image from 'next/image';
-import '@/styles/antd-custom.css';
+
 
 const { Title, Paragraph } = Typography;
 

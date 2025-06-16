@@ -11,7 +11,6 @@ import Component4 from '@/components/home/Component4';
 import Component5 from '@/components/home/Component5';
 import Component6 from '@/components/home/Component6';
 import Component7 from '@/components/home/Component7';
-import '@/styles/antd-custom.css';
 
 const { Content } = Layout;
 

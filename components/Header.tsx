@@ -1,27 +1,18 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Layout, Menu, Button, Drawer } from 'antd';
-import { MenuOutlined } from '@ant-design/icons';
 import Image from 'next/image';
-
-const { Header } = Layout;
 
 const HeaderComponent: React.FC = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
 
-  const showDrawer = () => {
-    setDrawerVisible(true);
-  };
-
-  const closeDrawer = () => {
-    setDrawerVisible(false);
-  };
+  const showDrawer = () => setDrawerVisible(true);
+  const closeDrawer = () => setDrawerVisible(false);
 
   return (
     <>
-      <Header className="bg-white shadow-sm">
-        <div className="flex items-center justify-between w-full px-4 sm:px-8 h-full">
+      <header className="bg-white shadow-sm">
+        <div className="flex items-center justify-between w-full px-4 sm:px-8 h-16">
           {/* Logo - Ẩn trên mobile */}
           <div className="h-12 pl-32 flex items-center hidden sm:flex">
             <Image
@@ -32,61 +23,71 @@ const HeaderComponent: React.FC = () => {
               priority
             />
           </div>
-          {/* Menu và nút cho desktop */}
+          {/* Nút cho desktop */}
           <div className="hidden sm:flex items-center">
-            <Menu
-              mode="horizontal"
-              defaultSelectedKeys={['nguon-dong']}
-              items={[
-                { key: 'nguon-dong', label: 'Nguồn động', className: 'source' },
-                { key: 'quan-an', label: 'Quản án' },
-                { key: 'tin-tuc', label: 'Tin tức' },
-              ]}
-              style={{ fontFamily: 'var(--font-baloo-2)' }}
-            />
-            <Button
-              className="download-app ml-4"
-              style={{ fontFamily: 'var(--font-baloo-2)' }}
+            <button
+              className="ml-4 bg-yellow-400 text-orange-500 rounded-full px-6 h-10 text-base font-semibold hover:bg-yellow-300 transition-colors font-baloo-2"
             >
               Tải ngay
-            </Button>
+            </button>
           </div>
-          {/* Nút hamburger cho mobile - Sát bên phải */}
-          <div className="flex sm:hidden justify-end mt-2 ml-auto"> 
-            <Button
-              type="text"
-              icon={<MenuOutlined style={{ color: '#f28c38', fontSize: '24px' }} />}
-              onClick={showDrawer}
-            />
+          {/* Nút hamburger cho mobile */}
+          <div className="flex sm:hidden justify-end mt-2 ml-auto">
+            <button onClick={showDrawer}>
+              <svg
+                className="w-6 h-6 text-orange-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
           </div>
         </div>
-      </Header>
+      </header>
       {/* Drawer cho menu mobile */}
-      <Drawer
-        title={
-          <div className="flex items-end">
-            <Image
-              src="/images/logo-mm-final-2.png"
-              alt="Mầm Map Logo"
-              width={80}
-              height={32}
-            />
-          </div>
-        }
-        placement="right"
-        onClose={closeDrawer}
-        open={drawerVisible}
-        className="mobile-drawer"
+      <div
+        className={`fixed inset-0 bg-white z-50 transform ${
+          drawerVisible ? 'translate-x-0' : 'translate-x-full'
+        } transition-transform duration-300 sm:hidden`}
       >
-        <div className="mobile-menu">
-          <div className="mobile-menu-item source">Nguồn động</div>
-          <div className="mobile-menu-item">Quản án</div>
-          <div className="mobile-menu-item">Tin tức</div>
-          <div className="mobile-menu-item download">
-            <Button className="download-app">Tải ngay</Button>
-          </div>
+        <div className="flex justify-between items-center p-4 border-b border-gray-200">
+          <Image
+            src="/images/logo-mm-final-2.png"
+            alt="Mầm Map Logo"
+            width={80}
+            height={32}
+          />
+          <button onClick={closeDrawer}>
+            <svg
+              className="w-6 h-6 text-orange-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
         </div>
-      </Drawer>
+        <div className="flex flex-col p-4 font-baloo-2">
+          <button
+            className="my-4 bg-yellow-400 text-orange-500 rounded-full px-6 h-10 text-base font-semibold hover:bg-yellow-300 transition-colors w-full text-center font-baloo-2"
+          >
+            Tải ngay
+          </button>
+        </div>
+      </div>
     </>
   );
 };
