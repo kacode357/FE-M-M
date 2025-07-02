@@ -5,6 +5,7 @@ import NotificationProvider from "@/components/NotificationProvider";
 import { AuthProvider } from "@/contexts/AuthContext";
 import "./globals.css";
 import "@ant-design/v5-patch-for-react-19";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,7 +44,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <AuthProvider>
             <NotificationProvider>{children}</NotificationProvider>
           </AuthProvider>
+          <Toaster position="top-right" reverseOrder={false} />
         </AntdRegistry>
+        
       </body>
     </html>
   );

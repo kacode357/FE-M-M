@@ -2,7 +2,8 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { DashboardOutlined, UserOutlined, ShopOutlined, AppleOutlined, CoffeeOutlined, ForkOutlined, LeftOutlined, RightOutlined, DollarOutlined } from '@ant-design/icons';
+// Thêm icon CreditCardOutlined cho thanh toán
+import { DashboardOutlined, UserOutlined, ShopOutlined, AppleOutlined, CoffeeOutlined, ForkOutlined, LeftOutlined, RightOutlined, DollarOutlined, BankOutlined, CreditCardOutlined } from '@ant-design/icons';
 import Image from 'next/image';
 import { AuthContext } from '@/contexts/AuthContext';
 import Dashboard from '@/components/admin/Dashboard';
@@ -12,6 +13,10 @@ import DietManagement from '@/components/admin/Diet/DietManagement';
 import TasteManagement from '@/components/admin/Taste/TasteManagement';
 import FoodTypeManagement from '@/components/admin/FoodType/FoodTypeManagement';
 import PremiumPackageManagement from '@/components/admin/PremiumPackage/PremiumPackageManagement';
+import SnackPlaceManagement from '@/components/admin/SnackPlace/SnackPlaceManagement';
+// Import component Payment mới
+import PaymentManagement from '@/components/admin/Payment/PaymentManagement';
+
 
 interface MenuItem {
   key: string;
@@ -20,13 +25,15 @@ interface MenuItem {
 }
 
 const MENU_ITEMS: MenuItem[] = [
-  { key: 'dashboard', icon: <DashboardOutlined className="text-xl" />, label: 'Thống kê' },
+  { key: 'dashboard', icon: <DashboardOutlined className="text-xl" />, label: 'Thống kê' },
   { key: 'users', icon: <UserOutlined className="text-xl" />, label: 'Người dùng' },
   { key: 'business', icon: <ShopOutlined className="text-xl" />, label: 'Mô hình kinh doanh' },
+  { key: 'snackplace', icon: <BankOutlined className="text-xl" />, label: 'Quán ăn vặt' },
   { key: 'diet', icon: <AppleOutlined className="text-xl" />, label: 'Chế độ ăn' },
   { key: 'taste', icon: <CoffeeOutlined className="text-xl" />, label: 'Khẩu vị' },
   { key: 'foodtype', icon: <ForkOutlined className="text-xl" />, label: 'Loại món ăn' },
   { key: 'premium', icon: <DollarOutlined className="text-xl" />, label: 'Gói Premium' },
+  { key: 'payment', icon: <CreditCardOutlined className="text-xl" />, label: 'Lịch sử giao dịch' }, // <-- THÊM VÀO ĐÂY
 ];
 
 const AdminPage: React.FC = () => {
@@ -129,10 +136,12 @@ const AdminPage: React.FC = () => {
             {selectedKey === 'dashboard' && <Dashboard />}
             {selectedKey === 'users' && <UserManagement />}
             {selectedKey === 'business' && <BusinessModels />}
+            {selectedKey === 'snackplace' && <SnackPlaceManagement />}
             {selectedKey === 'diet' && <DietManagement />}
             {selectedKey === 'taste' && <TasteManagement />}
             {selectedKey === 'foodtype' && <FoodTypeManagement />}
             {selectedKey === 'premium' && <PremiumPackageManagement />}
+            {selectedKey === 'payment' && <PaymentManagement />} 
           </div>
         </main>
       </div>
