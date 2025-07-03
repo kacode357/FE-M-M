@@ -27,7 +27,13 @@ const GetRevenueByMonthApi = async (params: { year: number }) => {
     return response.data;
 };
 
+// Lấy tổng số giao dịch thanh toán
+const GetTotalPaymentsApi = async () => {
+    const response = await defaultAxiosInstance.get('/api/Payment/count');
+    return response.data;
+};
 export {
+    GetTotalPaymentsApi,
     GetDashboardTotalsApi,
     GetMerchantPercentageApi,
     GetRevenueByDateApi,
