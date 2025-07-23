@@ -3,7 +3,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 // Thêm icon CreditCardOutlined cho thanh toán
-import { DashboardOutlined, UserOutlined, ShopOutlined, AppleOutlined, CoffeeOutlined, ForkOutlined, LeftOutlined, RightOutlined, DollarOutlined, BankOutlined, CreditCardOutlined } from '@ant-design/icons';
+import { DashboardOutlined, UserOutlined, ShopOutlined, AppleOutlined, CoffeeOutlined, ForkOutlined, LeftOutlined, RightOutlined, DollarOutlined, BankOutlined, CreditCardOutlined, StarOutlined } from '@ant-design/icons';
 import Image from 'next/image';
 import { AuthContext } from '@/contexts/AuthContext';
 import Dashboard from '@/components/admin/Dashboard';
@@ -16,6 +16,7 @@ import PremiumPackageManagement from '@/components/admin/PremiumPackage/PremiumP
 import SnackPlaceManagement from '@/components/admin/SnackPlace/SnackPlaceManagement';
 // Import component Payment mới
 import PaymentManagement from '@/components/admin/Payment/PaymentManagement';
+import AppRatingManagement from '@/components/admin/AppRatingManagement';
 
 
 interface MenuItem {
@@ -33,7 +34,8 @@ const MENU_ITEMS: MenuItem[] = [
   { key: 'taste', icon: <CoffeeOutlined className="text-xl" />, label: 'Khẩu vị' },
   { key: 'foodtype', icon: <ForkOutlined className="text-xl" />, label: 'Loại món ăn' },
   { key: 'premium', icon: <DollarOutlined className="text-xl" />, label: 'Gói Premium' },
-  { key: 'payment', icon: <CreditCardOutlined className="text-xl" />, label: 'Lịch sử giao dịch' }, // <-- THÊM VÀO ĐÂY
+  { key: 'payment', icon: <CreditCardOutlined className="text-xl" />, label: 'Lịch sử giao dịch' },
+   { key: 'apprating', icon: <StarOutlined className="text-xl" />, label: 'Đánh giá app' },
 ];
 
 const AdminPage: React.FC = () => {
@@ -142,6 +144,7 @@ const AdminPage: React.FC = () => {
             {selectedKey === 'foodtype' && <FoodTypeManagement />}
             {selectedKey === 'premium' && <PremiumPackageManagement />}
             {selectedKey === 'payment' && <PaymentManagement />} 
+            {selectedKey === 'apprating' && <AppRatingManagement />}
           </div>
         </main>
       </div>
