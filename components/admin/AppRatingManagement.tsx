@@ -4,7 +4,7 @@ import { searchAppRatings } from "@/services/apprating.services";
 interface AppRating {
   id: string;
   userId: string;
-  username: string; // <-- Thêm dòng này
+  username: string;
   star: number;
   description: string;
   appType: string;
@@ -24,6 +24,7 @@ const AppRatingManagement: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
 
+  // Lấy dữ liệu đánh giá theo trang
   const fetchRatings = async (pageNum = 1) => {
     setLoading(true);
     try {
@@ -40,6 +41,7 @@ const AppRatingManagement: React.FC = () => {
 
   useEffect(() => {
     fetchRatings(page);
+    // eslint-disable-next-line
   }, [page]);
 
   const handlePrev = () => {
@@ -54,6 +56,7 @@ const AppRatingManagement: React.FC = () => {
 
   return (
     <div>
+      {/* Tiêu đề và nút tải lại */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-bold text-center text-[#FF9500] flex-1">
           Danh sách đánh giá app
@@ -66,6 +69,15 @@ const AppRatingManagement: React.FC = () => {
           {loading ? "Đang tải..." : "Tải lại"}
         </button>
       </div>
+
+      {/* Tổng số đánh giá */}
+      {pageInfo && (
+        <div className="mb-2 text-right text-black font-medium">
+          Tổng số đánh giá: <span className="text-[#FF9500]">{pageInfo.total}</span>
+        </div>
+      )}
+
+      {/* Bảng đánh giá */}
       {loading ? (
         <div>Đang tải...</div>
       ) : ratings.length === 0 ? (
@@ -86,7 +98,9 @@ const AppRatingManagement: React.FC = () => {
             <tbody>
               {ratings.map((item, idx) => (
                 <tr key={item.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-2 border text-black">{(pageInfo?.pageSize ?? 10) * (page - 1) + idx + 1}</td>
+                  <td className="px-4 py-2 border text-black">
+                    {(pageInfo?.pageSize ?? 10) * (page - 1) + idx + 1}
+                  </td>
                   <td className="px-4 py-2 border text-black font-bold">{item.star}★</td>
                   <td className="px-4 py-2 border text-black">{item.description}</td>
                   <td className="px-4 py-2 border text-black">{item.appType}</td>
@@ -98,6 +112,8 @@ const AppRatingManagement: React.FC = () => {
           </table>
         </div>
       )}
+
+      {/* Phân trang */}
       {pageInfo && (
         <div className="mt-4 flex items-center justify-center gap-4">
           <button
